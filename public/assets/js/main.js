@@ -1,123 +1,363 @@
-/*
-	Prologue by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
+$(function ($) {
+  "use strict";
 
-(function($) {
+  jQuery(document).ready(function () {
+    // # link will target id and scroll
+    $('.about-links .mybtn3').on('click', function (event) {
+      var $anchor = $(this);
+      $('html, body').stop().animate({
+        scrollTop: $($anchor.attr('href')).offset().top - 80
+      }, 1000);
+      event.preventDefault();
+    });
+    //   magnific popup activation
+    $('.video-play').magnificPopup({
+      type: 'video'
+    });
 
-	var	$window = $(window),
-		$body = $('body'),
-		$nav = $('#nav');
+    $('.img-popup').magnificPopup({
+      type: 'image'
+    });
 
-	// Breakpoints.
-		breakpoints({
-			wide:      [ '961px',  '1880px' ],
-			normal:    [ '961px',  '1620px' ],
-			narrow:    [ '961px',  '1320px' ],
-			narrower:  [ '737px',  '960px'  ],
-			mobile:    [ null,     '736px'  ]
-		});
+    $('.popup-gallery').magnificPopup({
+      delegate: 'a',
+      type: 'image',
+      tLoading: 'Loading image #%curr%...',
+      mainClass: 'mfp-img-mobile',
+      gallery: {
+        enabled: true,
+        navigateByImgClick: true,
+        preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+      },
+      image: {
+        tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
+      }
+    });
 
-	// Play initial animations on page load.
-		$window.on('load', function() {
-			window.setTimeout(function() {
-				$body.removeClass('is-preload');
-			}, 100);
-		});
+    // Video Active
+    $("#bgndVideo").YTPlayer();
 
-	// Nav.
-		var $nav_a = $nav.find('a');
+    // MObile menu toggle 
+    $('.menu-toogle-icon').on('click', function () {
+      $('.side-menu').animate({
+        'width': 'toggle'
+      });
+      $('.menu-toogle-icon').toggleClass('active');
+    })
+    $('#nav-icon3').click(function () {
+      $(this).toggleClass('open');
+    });
+    //Mixitup js
+    $('.project-gallery').mixItUp();
 
-		$nav_a
-			.addClass('scrolly')
-			.on('click', function(e) {
+    $(".circle-progress").loading();
 
-				var $this = $(this);
+    // Typed js
+    $(".typed").typed({
+      strings: ["Web Developer.", "Blockchain Developer.", "Entrepreneur.", "Technical Mentor", "Freelancer."],
+      // Optionally use an HTML element to grab strings from (must wrap each string in a <p>)
+      stringsElement: null,
+      // typing speed
+      typeSpeed: 30,
+      // time before typing starts
+      startDelay: 500,
+      // backspacing speed
+      backSpeed: 20,
+      // time before backspacing
+      backDelay: 1200,
+      // loop
+      loop: true,
+    });
 
-				// External link? Bail.
-					if ($this.attr('href').charAt(0) != '#')
-						return;
+    $(".particals").buoyant({
+      containerClass: "buoyant-container",
+      parentClass: 'buoyant-parent',
+      numberOfItems: 20,
+      minRadius: 5,
+      maxRadius: 30,
+      elementClass: 'circles'
+    });
 
-				// Prevent default.
-					e.preventDefault();
+    $('#mainmenu-area').onePageNav({
+      currentClass: 'current',
+      changeHash: false,
+      scrollSpeed: 750,
+      scrollThreshold: 0.5,
+      filter: '',
+      easing: 'swing',
+      begin: function () {
+        //I get fired when the animation is starting
+      },
+      end: function () {
+        //I get fired when the animation is ending
+      },
+      scrollChange: function ($currentListItem) {
+        //I get fired when you enter a section and I pass the list item of the section
+      }
+    });
 
-				// Deactivate all links.
-					$nav_a.removeClass('active');
 
-				// Activate link *and* lock it (so Scrollex doesn't try to activate other links as we're scrolling to this one's section).
-					$this
-						.addClass('active')
-						.addClass('active-locked');
+    // counter up
+    $('.counter').counterUp({
+      delay: 10,
+      time: 2000
+    });
 
-			})
-			.each(function() {
+    // Active Bootstrap Tooltip
+    $('[data-toggle="tooltip"]').tooltip()
 
-				var	$this = $(this),
-					id = $this.attr('href'),
-					$section = $(id);
+    // heroarea-slider
+    var $hero_area_slider = $('.hero-area-slider');
+    $hero_area_slider.owlCarousel({
+      loop: true,
+      navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
+      nav: false,
+      dots: true,
+      autoplay: true,
+      autoplayTimeout: 7000,
+      smartSpeed: 1200,
+      animateOut: 'fadeOut',
+      animateIn: 'fadeIn',
+      onInitialized: startProgressBar,
+      onTranslate: resetProgressBar,
+      onTranslated: startProgressBar,
+      responsive: {
+        0: {
+          items: 1
+        },
+        576: {
+          items: 1
+        },
+        950: {
+          items: 1
+        },
+        960: {
+          items: 1
+        },
+        1200: {
+          items: 1
+        }
+      }
+    });
+    function startProgressBar() {
+      // apply keyframe animation
+      $(".slide-progress").css({
+        width: "100%",
+        transition: "width 7000ms"
+      });
+    }
+    function resetProgressBar() {
+      $(".slide-progress").css({
+        width: 0,
+        transition: "width 0s"
+      });
+    }
 
-				// No section for this link? Bail.
-					if ($section.length < 1)
-						return;
 
-				// Scrollex.
-					$section.scrollex({
-						mode: 'middle',
-						top: '-10vh',
-						bottom: '-10vh',
-						initialize: function() {
+    // testimonial_slider 
+    var $testimonial_slider = $('.testimonial-slider');
+    $testimonial_slider.owlCarousel({
+      loop: true,
+      navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
+      nav: false,
+      dots: false,
+      autoplay: true,
+      margin: 0,
+      autoplayTimeout: 6000,
+      smartSpeed: 1000,
+      responsive: {
+        0: {
+          items: 1
+        },
+        576: {
+          items: 1
+        },
+        768: {
+          items: 2
+        },
+        992: {
+          items: 2
+        },
+        1199: {
+          items: 3
+        }
+      }
+    });
 
-							// Deactivate section.
-								$section.addClass('inactive');
+    // team_slider 
+    var $team_slider = $('.team-slider');
+    $team_slider.owlCarousel({
+      loop: true,
+      navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
+      nav: false,
+      dots: false,
+      autoplay: true,
+      margin: 0,
+      autoplayTimeout: 6000,
+      smartSpeed: 1000,
+      responsive: {
+        0: {
+          items: 1
+        },
+        576: {
+          items: 1
+        },
+        768: {
+          items: 2
+        },
+        992: {
+          items: 3
+        },
+        1200: {
+          items: 4
+        }
+      }
+    });
 
-						},
-						enter: function() {
 
-							// Activate section.
-								$section.removeClass('inactive');
+    // blog_slider 
+    var $blog_slider = $('.blog-slider');
+    $blog_slider.owlCarousel({
+      loop: true,
+      navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
+      nav: false,
+      dots: false,
+      autoplay: true,
+      margin: 30,
+      autoplayTimeout: 6000,
+      smartSpeed: 1000,
+      responsive: {
+        0: {
+          items: 1
+        },
+        576: {
+          items: 1
+        },
+        768: {
+          items: 2
+        },
+        992: {
+          items: 3
+        },
+        1200: {
+          items: 3
+        }
+      }
+    });
 
-							// No locked links? Deactivate all links and activate this section's one.
-								if ($nav_a.filter('.active-locked').length == 0) {
 
-									$nav_a.removeClass('active');
-									$this.addClass('active');
+    // Portfolio Gallery slick part //
 
-								}
+    $('.big-image').slick({
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      arrows: false,
+      fade: true,
+      asNavFor: '.slider-img',
 
-							// Otherwise, if this section's link is the one that's locked, unlock it.
-								else if ($this.hasClass('active-locked'))
-									$this.removeClass('active-locked');
+      responsive: [
+        {
+          breakpoint: 991,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+          }
+        },
+        {
+          breakpoint: 767,
+          settings: {
+            vertical: false,
+            horizontal: true,
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
+    });
 
-						}
-					});
+    $('.slider-img').slick({
+      slidesToShow: 4,
+      slidesToScroll: 1,
+      responsive: [
+        {
+          breakpoint: 768,
+          settings: {
+            vertical: false,
+            slidesToShow: 3
+          }
+        }
+      ],
+      asNavFor: '.big-image',
+      dots: false,
+      arrows: true,
+      prevArrow: '<i class="fa fa fa-chevron-left slidPrv4"></i>',
+      nextArrow: '<i class="fa fa-chevron-right slidNext4"></i>',
+      centerPadding: '0px',
+      centerMode: true,
+      focusOnSelect: true,
+    });
 
-			});
+  });
 
-	// Scrolly.
-		$('.scrolly').scrolly();
 
-	// Header (narrower + mobile).
 
-		// Toggle.
-			$(
-				'<div id="headerToggle">' +
-					'<a href="#header" class="toggle"></a>' +
-				'</div>'
-			)
-				.appendTo($body);
 
-		// Header.
-			$('#header')
-				.panel({
-					delay: 500,
-					hideOnClick: true,
-					hideOnSwipe: true,
-					resetScroll: true,
-					resetForms: true,
-					side: 'left',
-					target: $body,
-					visibleClass: 'header-visible'
-				});
 
-})(jQuery);
+  /*-------------------------------
+          back to top
+      ------------------------------*/
+  $(document).on('click', '.bottomtotop', function () {
+    $("html,body").animate({
+      scrollTop: 0
+    }, 2000);
+  });
+
+  //define variable for store last scrolltop
+  var lastScrollTop = '';
+  $(window).on('scroll', function () {
+    var $window = $(window);
+    if ($window.scrollTop() > 0) {
+      $(".mainmenu-area").addClass('nav-fixed');
+    } else {
+      $(".mainmenu-area").removeClass('nav-fixed');
+    }
+
+    /*---------------------------
+                back to top show / hide
+            ---------------------------*/
+    var st = $(this).scrollTop();
+    var ScrollTop = $('.bottomtotop');
+    if ($(window).scrollTop() > 1000) {
+      ScrollTop.fadeIn(1000);
+    } else {
+      ScrollTop.fadeOut(1000);
+    }
+    lastScrollTop = st;
+
+  });
+
+  $(window).on('load', function () {
+
+    $("html,body").animate({
+      scrollTop: 0
+    }, 100);
+
+    new WOW().init();
+    /*---------------------
+                Preloader
+            -----------------------*/
+    var preLoder = $("#preloader");
+    preLoder.addClass('hide');
+    // var backtoTop = $('.back-to-top');
+    /*-----------------------------
+                back to top
+            -----------------------------*/
+    var backtoTop = $('.bottomtotop');
+    backtoTop.fadeOut(100);
+
+  });
+
+
+
+
+});
